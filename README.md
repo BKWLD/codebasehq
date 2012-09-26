@@ -1,6 +1,6 @@
 # Laravel + Codebase
 
-This is a [Laravel Bundle](http://bundles.laravel.com/) that makes it easy to integrate with [Codebase](http://www.codebasehq.com/) features.  Currently, this means only pushing exceptions to [Codebase's Exception](http://blog.atechmedia.com/2012/08/exception-tracking-in-codebase/) tracker but I'd like to add more features if people have suggestions.
+This is a [Laravel Bundle](http://bundles.laravel.com/) that makes it easy to integrate with [Codebase](http://www.codebasehq.com/) features.  Currently, this means pushing exceptions to [Codebase's Exception](http://blog.atechmedia.com/2012/08/exception-tracking-in-codebase/) tracker but I'd like to add more features if people have suggestions.
 
 ## Installation
 
