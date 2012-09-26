@@ -8,7 +8,7 @@ IoC::singleton('airbrake', function() {
 	require_once 'vendor/php-airbrake/src/Airbrake/Configuration.php';
 
 	// Settings
-	$apiKey  = Config::get('codebasehq::codebasehq.api_key');
+	$apiKey  = Config::get('laravel-plus-codebase::codebase.api_key');
 	$options = array(
 		'apiEndPoint' => 'https://exceptions.codebasehq.com/notifier_api/v2/notices',
 		'environmentName' => Request::env(),
