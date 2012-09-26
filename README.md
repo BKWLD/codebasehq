@@ -5,7 +5,7 @@ This is a [Laravel Bundle](http://bundles.laravel.com/) that makes it easy to in
 ## Installation
 
 1. Install it with `php artisan bundle:install laravel-plus-codebase`
-2. Register the bundle in application/bundles.php with: `return array('bootstrapper' => array('auto' => true))`
+2. Register the bundle in application/bundles.php with: `return array('laravel-plus-codebase' => array('auto' => true))`
 
 ## Configuration
 
