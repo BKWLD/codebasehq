@@ -26,13 +26,13 @@ IoC::singleton('airbrake', function() {
 // Listen for exception events and pass them to Codebase HQ.  Using this rather than
 // listening to log events so we can get the full exception stack trace rather than the
 // summary that gets truncated by exception_line()
-Config::set('error.logger', function($exception) {
+if (Config::get('laravel-plus-codebase::enable')
+	&& Config::get('error.log')) {
+	Config::set('error.logger', function($exception) {
 
-	// Don't post if logging is turned off
-	if (!Config::get('error.log')) return;
-
-	// Pass error to Codebase through Airbrake interface
-	$airbrake = IoC::resolve('airbrake');
-	$airbrake->notifyOnException($exception);
-	
-});
+		// Pass error to Codebase through Airbrake interface
+		$airbrake = IoC::resolve('airbrake');
+		$airbrake->notifyOnException($exception);
+		
+	});
+}
