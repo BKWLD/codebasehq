@@ -28,11 +28,15 @@ IoC::singleton('airbrake', function() {
 // summary that gets truncated by exception_line()
 if (Config::get('laravel-plus-codebase::codebase.enable')
 	&& Config::get('error.log')) {
-	Config::set('error.logger', function($exception) {
+	$callback = Config::get('error.logger');
+	Config::set('error.logger', function($exception) use ($callback) {
 
 		// Pass error to Codebase through Airbrake interface
 		$airbrake = IoC::resolve('airbrake');
 		$airbrake->notifyOnException($exception);
+		
+		// Call previous registered function
+		$callback($exception);
 		
 	});
 }
