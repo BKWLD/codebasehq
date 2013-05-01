@@ -4,6 +4,7 @@ use Airbrake;
 use App;
 use Illuminate\Support\ServiceProvider;
 use Config;
+use Exception;
 
 class CodebaseHQServiceProvider extends ServiceProvider {
 
@@ -38,6 +39,16 @@ class CodebaseHQServiceProvider extends ServiceProvider {
 		// Instantiate airbrake
 		$config = new Airbrake\Configuration($apiKey, $options);
 		$client = new Airbrake\Client($config);
+		
+		// Listen for exception events and pass them to Codebase HQ.
+		App::error(function(Exception $exception) use ($client) {
+			
+			// Exceptions to ignore
+			if (is_a($exception, 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException')) return;
+			
+			// Tell Codebase
+			$client->notifyOnException($exception);
+		});
 		
 	}
 
