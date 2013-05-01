@@ -4,7 +4,7 @@ This is a [Laravel Package](http://laravel.com/) that makes it easy to integrate
 
 ## Installation
 
-1. Install it with `php artisan bundle:install laravel-plus-codebase`
+1. Install it with `php artisan bundle:install laravel-plus-codebase` 
 2. Register the bundle in application/bundles.php with: `return array('laravel-plus-codebase' => array('auto' => true))`
 
 ## Configuration
