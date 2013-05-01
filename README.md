@@ -1,6 +1,6 @@
-# Laravel + Codebase
+# CodebaseHQ
 
-This is a [Laravel Bundle](http://bundles.laravel.com/) that makes it easy to integrate with [Codebase](http://www.codebasehq.com/) features.  Currently, this means pushing exceptions to [Codebase's Exception](http://blog.atechmedia.com/2012/08/exception-tracking-in-codebase/) tracker but I'd like to add more features if people have suggestions.
+This is a [Laravel Package](http://laravel.com/) that makes it easy to integrate with [Codebase](http://www.codebasehq.com/) features.  Currently, this means pushing exceptions to [Codebase's Exception](http://blog.atechmedia.com/2012/08/exception-tracking-in-codebase/) tracker but I'd like to add more features if people have suggestions.
 
 ## Installation
 
@@ -16,7 +16,3 @@ This is a [Laravel Bundle](http://bundles.laravel.com/) that makes it easy to in
 If you have logging turned on (the config directive "error.log" in application/config/error.php), all of your exceptions will now be automatically be posted to the Exceptions view in your Codebase project.  Note: error logs will NOT be generated in your filesystem, only on Codebase.
 
 By default, your "local" enviornment will not post exceptions to Codebase.  This can be changed in the bundles config/local/codebase.php file.
-
-## Thanks
-
-This project depends heavily on [php-airbrake](https://github.com/nodrew/php-airbrake).
