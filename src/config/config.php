@@ -1,6 +1,4 @@
-<?php
-
-return array(
+<?php return array(
 	
 	/* 
 	 * The API key for your Codebase project.  You can get this by visiting 

@@ -1,6 +1,4 @@
-<?php
-
-return array(
+<?php return array(
 
 	/*
 	 * Most people will probably want to turn off exception logging
