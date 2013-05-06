@@ -28,6 +28,9 @@ class CodebaseHQServiceProvider extends ServiceProvider {
 	public function boot() {
 		$this->package('bkwld/codebasehq');
 		
+		// Don't initialize if it's been disabled for this environment
+		if (!Config::get('codebasehq::enable')) return;
+		
 		// Settings
 		$apiKey  = Config::get('codebasehq::api_key');
 		$options = array(
