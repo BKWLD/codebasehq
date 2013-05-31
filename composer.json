@@ -2,8 +2,7 @@
     "name": "bkwld/codebasehq",
     "description": "Tools for integrating Laravel apps with CodebaseHQ features",
     "authors": [{
-        "name": "Robert Reinhard",
-        "email": "@weotch"
+        "name": "Robert Reinhard"
     }],
     "require": {
         "php": ">=5.3.0",
