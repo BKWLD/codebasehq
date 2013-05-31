@@ -4,15 +4,14 @@ This is a [Laravel Package](http://laravel.com/) that makes it easy to integrate
 
 ## Installation
 
-1. Install it with `php artisan bundle:install laravel-plus-codebase` 
-2. Register the bundle in application/bundles.php with: `return array('laravel-plus-codebase' => array('auto' => true))`
+1. Add to your composer.json's: `"bkwld/codebasehq": "~2.0"`.  Then do a regular composer install.
+2. Add as a Laravel provider in app/config/app.php's provider list: `'Bkwld\CodebaseHQ\CodebaseHQServiceProvider',`
 
 ## Configuration
 
-* Add the API key for your Codebase project to bundles/laravel-plus-codebase/config/codebase.php.  You can get this by visiting the Exceptions view of a Codebase project, you'll see it displayed on the page.  It looks something like "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+* Add the API key for your Codebase project to app/config/packages/bkwld/codebasehq/config.php.  You can get this by visiting the Exceptions view of a Codebase project, you'll see it displayed on the page.  It looks something like "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
 ## Usage
 
-If you have logging turned on (the config directive "error.log" in application/config/error.php), all of your exceptions will now be automatically be posted to the Exceptions view in your Codebase project.  Note: error logs will NOT be generated in your filesystem, only on Codebase.
-
-By default, your "local" enviornment will not post exceptions to Codebase.  This can be changed in the bundles config/local/codebase.php file.
+* 404 errors are currently ignored.  All other exceptions will be posted to Codebase
+* By default, your "local" enviornment will not post exceptions to Codebase.  This can be changed in the bundles config/local/codebase.php file.
