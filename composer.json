@@ -1,0 +1,17 @@
+{
+    "name": "bkwld/codebasehq",
+    "description": "Tools for integrating Laravel apps with CodebaseHQ features",
+    "authors": [{ "name": "Robert Reinhard" }],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.0.x",
+        "dbtlr/php-airbrake": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Bkwld\\CodebaseHQ": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
