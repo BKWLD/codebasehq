@@ -29,18 +29,16 @@ class DeployTickets extends Command {
 	 */
 	protected function getOptions() {
 		return array(
-			array('server', 's', InputOption::VALUE_OPTIONAL, 'The name of the server enviornment being deployed to'),
+			array('server', 's', InputOption::VALUE_OPTIONAL, 'The name of the server environment being deployed to'),
 		);
 	}
 
 	/**
 	 * Inject dependencies
 	 * @param Bkwld\CodebaseHQ\Request $request
-	 * @param string $repo The name of the reo
 	 */
-	public function __construct($request, $repo) {
+	public function __construct($request) {
 		$this->request = $request;
-		$this->repo = $repo;
 		parent::__construct();
 	}
 
@@ -52,11 +50,15 @@ class DeployTickets extends Command {
 	public function fire() {
 		
 		// Require enviornment to be passed in
-		$enviornment = $this->option('server');
+		$environment = $this->option('server');
 		
 		// Get info of person running the deploy
 		$name = trim(`git config --get user.name`);
 		$email = trim(`git config --get user.email`);
+		
+		// Get the name of the repo
+		preg_match('#/([\w-]+)\.git$#', trim(`git config --get remote.origin.url`), $matches);
+		$repo = $matches[1];
 		
 		// Loop through STDIN and find ticket references
 		$commit= null;
@@ -78,23 +80,23 @@ class DeployTickets extends Command {
 			}
 		}
 		
+		// Prepare message
+		$date = new DateTime();
+		$date->setTimezone(new DateTimeZone('America/Los_Angeles'));
+		$date = $date->format('l, F jS \a\t g:i A T');
+		$environment = $environment ? ", to **{$environment}**," : null;
+		
 		// Loop through those and creat ticket comments in codebase
 		foreach($deployed as $ticket => $commits) {
 
-			// Prepare message
-			$date = new DateTime();
-			$date->setTimezone(new DateTimeZone('America/Los_Angeles'));
-			$date = $date->format('l, F jS \a\t g:i A T');
-			$enviornment = $enviornment ? ", to **{$enviornment}**," : null;
-
 			// Singular commits
 			if (count($commits) === 1) {
-				$message = "Note: [{$name}](mailto:{$email}) deployed{$enviornment} a commit that references this ticket on {$date}.\n\nThe commit was: {commit:{$this->repo}/{$commit}}";
+				$message = "Note: [{$name}](mailto:{$email}) deployed{$environment} a commit that references this ticket on {$date}.\n\nThe commit was: {commit:{$repo}/{$commit}}";
 			
 			// Plural commits
 			} else {
-				$message = "Note: [{$name}](mailto:{$email}) deployed{$enviornment} commits that reference this ticket on {$date}.\n\nThe commits were:\n\n";
-				foreach($commits as $commit) { $message .= "- {commit:{$this->repo}/{$commit}}\n"; }
+				$message = "Note: [{$name}](mailto:{$email}) deployed{$environment} commits that reference this ticket on {$date}.\n\nThe commits were:\n\n";
+				foreach($commits as $commit) { $message .= "- {commit:{$repo}/{$commit}}\n"; }
 			}
 
 			// Create XML request

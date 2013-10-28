@@ -36,11 +36,9 @@ class Deploy extends Command {
 	/**
 	 * Inject dependencies
 	 * @param Bkwld\CodebaseHQ\Request $request
-	 * @param string $repo The name of the reo
 	 */
-	public function __construct($request, $repo) {
+	public function __construct($request) {
 		$this->request = $request;
-		$this->repo = $repo;
 		parent::__construct();
 	}
 
@@ -67,9 +65,13 @@ class Deploy extends Command {
 		$xml->addChild('revision', $revision);
 		$xml->addChild('environment', $environment);
 		$xml->addChild('server', $server);
+		
+		// Get the name of the repo
+		preg_match('#/([\w-]+)\.git$#', trim(`git config --get remote.origin.url`), $matches);
+		$repo = $matches[1];
 
 		// Send request
-		$this->request->call('POST', $this->repo.'/deployments', $xml->asXML());
+		$this->request->call('POST', $repo.'/deployments', $xml->asXML());
 		
 		// Ouptut status
 		$this->info('CodebaseHQ has been notified of the deployment');
