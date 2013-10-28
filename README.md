@@ -29,9 +29,9 @@ This just works as long as you have supplied the api key.  404 errors are curren
 
 DeployHQ has a "Deployments" tab, found within your repo, that lists deployments.  You can add to this list using the `codebasehq:deploy` command.  It accepts the following options, which mimic those found in the [API docs](http://support.codebasehq.com/kb/repositories/deployments).
 
-- branch - The branch which you are deploying. This defaults to the currently checked out branch.
-- revision - The reference of the revision/commit you are deploying. This must already exist in your repository and **have been pushed to Codebase**. It defaults to the HEAD commit.
-- environment - The environment you are pushing to.
+- `branch` - The branch which you are deploying. This defaults to the currently checked out branch.
+- `revision` - The reference of the revision/commit you are deploying. It defaults to the HEAD commit.
+- `environment` - The environment you are pushing to.
 - `servers` **required** - List of servers which you are deploying to (multiple servers should be comma separated, e.g. app1.myapp.com, app2.myapp.com, app3.myapp.com).
 
 Examples:
