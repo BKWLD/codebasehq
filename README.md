@@ -25,7 +25,7 @@ You will need to edit the published config file, supplying your API creds, for t
 
 This just works as long as you have supplied the api key.  404 errors are currently ignored.  All other exceptions will be posted to Codebase.  By default, your "local" enviornment will not post exceptions to Codebase.  This can be changed in the published config file at app/config/packages/bkwld/codebasehq/local/config.php.
 
-### Deploy notifications *Currently in development*
+### Deploy notifications
 
 DeployHQ has a "Deployments" tab, found within your repo, that lists deployments.  You can add to this list using the `codebasehq:deploy` command.  It accepts the following options, which mimic those found in the [API docs](http://support.codebasehq.com/kb/repositories/deployments).
 
