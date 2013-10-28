@@ -21,12 +21,6 @@
 	 */
 	'exceptions_key' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
 	
-	/**
-	 * The Deploys API key for your repo.  This can be found on the "Deployments" tab
-	 * of your repository for this Laravel app.
-	 */
-	'deployments_key' => 'xxxxxxxxxxxxxxxx',
-	
 	/*
 	 * Toggle to turn off exception logging to codebase. This can be overriden in
 	 * enviornment specific config files

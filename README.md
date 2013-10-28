@@ -18,7 +18,6 @@ You will need to edit the published config file, supplying your API creds, for t
 
 * To log exceptions, **only** the `exceptions_key` is required
 * For either deploy command, your user api creds are needed
-* For simple deploy notifications, you'll also need the `deployments_key` 
 
 ## Usage
 
