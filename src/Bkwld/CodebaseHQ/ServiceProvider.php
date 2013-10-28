@@ -39,12 +39,18 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 			);
 		});
 		
+		// Figure out the current repo using git
+		$this->app->singleton('codebasehq::repo', function($app) {
+			preg_match('#/([\w-]+)\.git$#', trim(`git config --get remote.origin.url`), $matches);
+			return $matches[1];
+		});
+		
 		// Register commands
 		$this->app->singleton('command.codebasehq.deploy', function($app) {
-			return new Commands\Deploy($app->make('codebasehq.request'));
+			return new Commands\Deploy($app->make('codebasehq.request'), $app->make('codebasehq::repo'));
 		});
 		$this->app->singleton('command.codebasehq.deploy_tickets', function($app) {
-			return new Commands\DeployTickets($app->make('codebasehq.request'));
+			return new Commands\DeployTickets($app->make('codebasehq.request'), $app->make('codebasehq::repo'));
 		});
 		$this->commands(array('command.codebasehq.deploy', 'command.codebasehq.deploy_tickets'));
 		

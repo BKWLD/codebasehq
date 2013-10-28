@@ -36,11 +36,12 @@ class DeployTickets extends Command {
 	/**
 	 * Inject dependencies
 	 * @param Bkwld\CodebaseHQ\Request $request
+	 * @param string $repo The name of the reo
 	 */
-	public function __construct($request) {
+	public function __construct($request, $repo) {
 		$this->request = $request;
+		$this->repo = $repo;
 		parent::__construct();
-		
 	}
 
 	/**
@@ -56,10 +57,6 @@ class DeployTickets extends Command {
 		// Get info of person running the deploy
 		$name = trim(`git config --get user.name`);
 		$email = trim(`git config --get user.email`);
-		
-		// Figure out the Codebase repo name
-		preg_match('#/([\w-]+)\.git$#', trim(`git config --get remote.origin.url`), $matches);
-		$repo = $matches[1];
 		
 		// Loop through STDIN and find ticket references
 		$commit= null;
@@ -88,16 +85,16 @@ class DeployTickets extends Command {
 			$date = new DateTime();
 			$date->setTimezone(new DateTimeZone('America/Los_Angeles'));
 			$date = $date->format('l, F jS \a\t g:i A T');
-			$enviornment = empty($enviornment) ? '' : ", to **{$enviornment}**,";
+			$enviornment = $enviornment ? ", to **{$enviornment}**," : null;
 
 			// Singular commits
 			if (count($commits) === 1) {
-				$message = "Note: [{$name}](mailto:{$email}) deployed{$enviornment} a commit that references this ticket on {$date}.\n\nThe commit was: {commit:{$repo}/{$commit}}";
+				$message = "Note: [{$name}](mailto:{$email}) deployed{$enviornment} a commit that references this ticket on {$date}.\n\nThe commit was: {commit:{$this->repo}/{$commit}}";
 			
 			// Plural commits
 			} else {
 				$message = "Note: [{$name}](mailto:{$email}) deployed{$enviornment} commits that reference this ticket on {$date}.\n\nThe commits were:\n\n";
-				foreach($commits as $commit) { $message .= "- {commit:{$repo}/{$commit}}\n"; }
+				foreach($commits as $commit) { $message .= "- {commit:{$this->repo}/{$commit}}\n"; }
 			}
 
 			// Create XML request
