@@ -25,11 +25,11 @@ class DeployTickets extends Command {
 	protected $description = 'Pass git logs via STDIN and update all referenced tickets';
 
 	/**
-	 * The arguments
+	 * The options
 	 */
-	protected function getArguments() {
+	protected function getOptions() {
 		return array(
-			array('env', InputOption::VALUE_REQUIRED, 'The enviornment name being deployed to'),
+			array('server', 's', InputOption::VALUE_OPTIONAL, 'The name of the server enviornment being deployed to'),
 		);
 	}
 
@@ -51,7 +51,7 @@ class DeployTickets extends Command {
 	public function fire() {
 		
 		// Require enviornment to be passed in
-		$enviornment = $this->argument('env');
+		$enviornment = $this->option('server');
 		
 		// Get info of person running the deploy
 		$name = trim(`git config --get user.name`);
