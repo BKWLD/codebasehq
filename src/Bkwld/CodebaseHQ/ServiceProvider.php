@@ -3,7 +3,7 @@
 // Dependencies
 use Airbrake;
 
-class CodebaseHQServiceProvider extends \Illuminate\Support\ServiceProvider {
+class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 
 	/**
 	 * Register the service provider.
