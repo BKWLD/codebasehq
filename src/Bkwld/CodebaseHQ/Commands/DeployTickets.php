@@ -92,7 +92,7 @@ class DeployTickets extends Command {
 
 			// Singular commits
 			if (count($commits) === 1) {
-				$message = "Note: [{$name}](mailto:{$email}) deployed{$enviornment} a commit that references this ticket on {$date}.\n\nThe commits was: {commit:{$repo}/{$commit}}";
+				$message = "Note: [{$name}](mailto:{$email}) deployed{$enviornment} a commit that references this ticket on {$date}.\n\nThe commit was: {commit:{$repo}/{$commit}}";
 			
 			// Plural commits
 			} else {
