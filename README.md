@@ -1,6 +1,10 @@
 # CodebaseHQ
 
-This is a [Laravel Package](http://laravel.com/) that makes it easy to integrate with select [Codebase](http://www.codebasehq.com/) features.  Currently, this means pushing exceptions to [Codebase's Exception](http://blog.atechmedia.com/2012/08/exception-tracking-in-codebase/) tracker but I'd like to add more features if people have suggestions.
+This is a [Laravel Package](http://laravel.com/) that makes it easy to integrate with select [Codebase](http://www.codebasehq.com/) features:
+
+* Pushing of exceptions, including full stack trace and all enviornment variables.
+* A command that can be used in a deploy script to log a deployment.
+* A command that can be used to comment on all tickets that were refrenced in deployed git commit logs.
 
 ## Installation
 
@@ -14,5 +18,14 @@ This is a [Laravel Package](http://laravel.com/) that makes it easy to integrate
 
 ## Usage
 
+### Exception Logging
+
 * 404 errors are currently ignored.  All other exceptions will be posted to Codebase
-* By default, your "local" enviornment will not post exceptions to Codebase.  This can be changed in the bundles config/local/codebase.php file.
+* By default, your "local" enviornment will not post exceptions to Codebase.  This can be changed in the published config file at app/config/packages/bkwld/codebasehq/local/config.php.
+
+### Deploy notifications
+
+
+
+### Deployed tickets via git commits
+

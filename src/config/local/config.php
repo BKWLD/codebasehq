@@ -4,6 +4,6 @@
 	 * Most people will probably want to turn off exception logging
 	 * while doing local development
 	 */
-	'enable' => false,
+	'exception_logging' => false,
 	
 );
