@@ -29,7 +29,7 @@ class Deploy extends Command {
 			array('branch', 'b', InputOption::VALUE_OPTIONAL, 'The branch which you are deploying'),
 			array('revision', 'r', InputOption::VALUE_OPTIONAL, 'The reference of the revision/commit you are deploying'),
 			array('environment', null, InputOption::VALUE_OPTIONAL, 'The environment you are pushing to'),
-			array('server', 's', InputOption::VALUE_REQUIRED, 'List of servers (comma seperated) which you are deploying to'),
+			array('servers', 's', InputOption::VALUE_REQUIRED, 'List of servers (comma seperated) which you are deploying to'),
 		);
 	}
 	
@@ -53,7 +53,7 @@ class Deploy extends Command {
 		$branch = $this->option('branch');
 		$revision = $this->option('revision');
 		$environment = $this->option('environment');
-		$server = $this->option('server');
+		$servers = $this->option('servers');
 		
 		// Create defaults by talking to git
 		if (!$branch) $branch = trim(`git rev-parse --abbrev-ref HEAD`);
@@ -64,7 +64,7 @@ class Deploy extends Command {
 		$xml->addChild('branch', $branch);
 		$xml->addChild('revision', $revision);
 		$xml->addChild('environment', $environment);
-		$xml->addChild('server', $server);
+		$xml->addChild('servers', $servers);
 		
 		// Get the name of the repo
 		preg_match('#/([\w-]+)\.git$#', trim(`git config --get remote.origin.url`), $matches);
