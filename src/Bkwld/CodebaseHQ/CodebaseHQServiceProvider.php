@@ -1,57 +1,54 @@
 <?php namespace Bkwld\CodebaseHQ;
 
+// Dependencies
 use Airbrake;
-use App;
-use Illuminate\Support\ServiceProvider;
-use Config;
-use Exception;
 
-class CodebaseHQServiceProvider extends ServiceProvider {
-
-	/**
-	 * Indicates if loading of the provider is deferred.
-	 *
-	 * @var bool
-	 */
-	protected $defer = false;
+class CodebaseHQServiceProvider extends \Illuminate\Support\ServiceProvider {
 
 	/**
 	 * Register the service provider.
 	 *
 	 * @return void
 	 */
-	public function register(){}
+	public function register() {
+		
+		// Build the airbrake object for posting exceptions to airbrake
+		$this->app->singleton('codebasehq.airbrake', function($app) {
+			
+			// Settings
+			$apiKey  = $app->make('config')->get('codebasehq::api_key');
+			$options = array(
+				'apiEndPoint' => 'https://exceptions.codebasehq.com/notifier_api/v2/notices',
+				'environmentName' => $app->environment(),
+				'timeout' => 10, // The default wasn't log enough in my tests
+			);
+			
+			// Instantiate airbrake
+			$config = new Airbrake\Configuration($apiKey, $options);
+			return new Airbrake\Client($config);
+				
+		});
+		
+	}
 	
 	/**
 	 * Boot it up
 	 */
 	public function boot() {
 		$this->package('bkwld/codebasehq');
-		
-		// Don't initialize if it's been disabled for this environment
-		if (!Config::get('codebasehq::enable')) return;
-		
-		// Settings
-		$apiKey  = Config::get('codebasehq::api_key');
-		$options = array(
-			'apiEndPoint' => 'https://exceptions.codebasehq.com/notifier_api/v2/notices',
-			'environmentName' => App::environment(),
-			'timeout' => 10, // The default wasn't log enough in my tests
-		);
-
-		// Instantiate airbrake
-		$config = new Airbrake\Configuration($apiKey, $options);
-		$client = new Airbrake\Client($config);
+		$app = $this->app;
 		
 		// Listen for exception events and pass them to Codebase HQ.
-		App::error(function(Exception $exception) use ($client) {
-			
-			// Exceptions to ignore
-			if (is_a($exception, 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException')) return;
-			
-			// Tell Codebase
-			$client->notifyOnException($exception);
-		});
+		if ($this->app->make('config')->get('codebasehq::enable')) {
+			$this->app->error(function(\Exception $exception) use ($app) {
+				
+				// Exceptions to ignore
+				if (is_a($exception, 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException')) return;
+				
+				// Tell Codebase
+				$app->make('codebasehq.airbrake')->notifyOnException($exception);
+			});
+		}
 		
 	}
 
@@ -60,6 +57,8 @@ class CodebaseHQServiceProvider extends ServiceProvider {
 	 *
 	 * @return array
 	 */
-	public function provides() { return array(); }
+	public function provides() { 
+		return array('codebasehq.airbrake'); 
+	}
 
 }
