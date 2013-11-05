@@ -71,7 +71,7 @@ class DeployTickets extends Command {
 			}
 			
 			// Check for a ticket and add to the deployed array
-			if (preg_match_all('#\[ *(?:touch|complete) *: *(\d+) *\]#', $line, $matches)) {
+			if (preg_match_all('#\[ *[\w-]+ *: *(\d+) *\]#', $line, $matches)) {
 				foreach($matches[1] as $ticket) {
 					if (empty($deployed[$ticket])) $deployed[$ticket] = array();
 					if (in_array($commit, $deployed[$ticket])) continue;
