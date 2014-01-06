@@ -30,6 +30,7 @@ class DeployTickets extends Command {
 	protected function getOptions() {
 		return array(
 			array('server', 's', InputOption::VALUE_OPTIONAL, 'The name of the server environment being deployed to'),
+			array('remote', 'r', InputOption::VALUE_OPTIONAL, 'The git remote name for the CodebaseHQ repo', 'origin'),
 		);
 	}
 
@@ -49,15 +50,16 @@ class DeployTickets extends Command {
 	 */
 	public function fire() {
 		
-		// Require enviornment to be passed in
+		// Localize options
 		$environment = $this->option('server');
+		$remote = $this->option('remote');
 		
 		// Get info of person running the deploy
 		$name = trim(`git config --get user.name`);
 		$email = trim(`git config --get user.email`);
 		
 		// Get the name of the repo
-		preg_match('#/([\w-]+)\.git$#', trim(`git config --get remote.origin.url`), $matches);
+		preg_match('#/([\w-]+)\.git$#', trim(shell_exec("git config --get remote.{$remote}.url")), $matches);
 		$repo = $matches[1];
 		
 		// Loop through STDIN and find ticket references
