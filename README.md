@@ -44,7 +44,7 @@ Examples:
 This command is designed to be run as part of a deploy script and requires you using the CodebaseHQ feature of linking to tickets from commit messages (ex: [touch:12]).  By piping the output from `git log` for the commits you are deploying to `php artisan codebasehq:deploy-tickets`, the package will scan the logs for ticket references and then update those tickets that they have been deployed.  Here's some examples:
 
 	# Get all the commits that aren't on staging/master but are local
-	`git log staging/master..master | php artisan codebasehq:deploy-tickes`
+	git log staging/master..master | php artisan codebasehq:deploy-tickets
 	
 	# The same as before, but fetch first so the diff is up to date
 	git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets
