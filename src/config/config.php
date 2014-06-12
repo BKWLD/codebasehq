@@ -26,4 +26,13 @@
 	 * enviornment specific config files
 	 */
 	'exception_logging' => true,
+
+	/**
+	 * Exceptions that shouldn't be reported to Codebase
+	 */
+	'ignored_exceptions' => array(
+		'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+		'Illuminate\Database\Eloquent\ModelNotFoundException',
+		'Illuminate\Session\TokenMismatchException',
+	),
 );

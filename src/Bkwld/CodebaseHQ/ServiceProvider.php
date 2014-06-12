@@ -62,8 +62,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 			$app->error(function(\Exception $exception) use ($app) {
 				
 				// Exceptions to ignore
-				if (is_a($exception, 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException')
-					|| is_a($exception, 'Illuminate\Database\Eloquent\ModelNotFoundException')) return;
+				foreach($app->make('config')->get('codebasehq::ignored_exceptions') as $class) {
+					if (is_a($exception, $class)) return;
+				}
 				
 				// Tell Codebase
 				$app->make('codebasehq.airbrake')->notifyOnException($exception);
