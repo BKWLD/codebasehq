@@ -28,7 +28,7 @@ class Deploy extends Command {
 		return array(
 			array('branch', 'b', InputOption::VALUE_OPTIONAL, 'The branch which you are deploying'),
 			array('revision', 'r', InputOption::VALUE_OPTIONAL, 'The reference of the revision/commit you are deploying'),
-			array('environment', null, InputOption::VALUE_OPTIONAL, 'The environment you are pushing to'),
+			array('deploy-env', null, InputOption::VALUE_OPTIONAL, 'The environment you are pushing to'),
 			array('servers', 's', InputOption::VALUE_REQUIRED, 'List of servers (comma seperated) which you are deploying to'),
 		);
 	}
@@ -52,7 +52,7 @@ class Deploy extends Command {
 		// Get options
 		$branch = $this->option('branch');
 		$revision = $this->option('revision');
-		$environment = $this->option('environment');
+		$environment = $this->option('deploy-env');
 		$servers = $this->option('servers');
 		
 		// Create defaults by talking to git
