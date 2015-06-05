@@ -31,8 +31,10 @@
 	 * Exceptions that shouldn't be reported to Codebase
 	 */
 	'ignored_exceptions' => array(
-		'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
 		'Illuminate\Database\Eloquent\ModelNotFoundException',
 		'Illuminate\Session\TokenMismatchException',
+		'Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException',
+		'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+		'Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException',
 	),
 );
