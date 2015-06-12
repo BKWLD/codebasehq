@@ -12,8 +12,8 @@
 	 * that you do not hard code them, but load load them from your environment.
 	 */
 	'api' => array(
-		'username' => $_ENV['CODEBASE_USERNAME'],
-		'key' => $_ENV['CODEBASE_KEY'],
+		'username' => @$_ENV['CODEBASE_USERNAME'],
+		'key' => @$_ENV['CODEBASE_KEY'],
 	),
 	
 	/* 
