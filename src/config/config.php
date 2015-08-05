@@ -36,6 +36,7 @@
 		'Illuminate\Database\Eloquent\ModelNotFoundException',
 		'Illuminate\Session\TokenMismatchException',
 		'Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException',
+		'Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException',
 		'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
 		'Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException',
 	),
