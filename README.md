@@ -8,7 +8,7 @@ This is a [Laravel Package](http://laravel.com/) that makes it easy to integrate
 
 ## Installation
 
-1. Add it to your composer.json (`"bkwld/codebasehq": "dev-master"`) and do a composer install.
+1. Add it to your composer.json (`"bkwld/codebasehq": "~4.0"`) and do a composer install.
 2. Add the service provider to your app.php config file providers: `Bkwld\CodebaseHQ\ServiceProvider::class,`.
 
 
@@ -19,7 +19,7 @@ You will need to supply credentials to your CodebaseHQ account for this package 
 - To log exceptions, **only** the `project` configs is required
 - For either deploy command, your user `api` creds are needed
 
-#### .env configuration
+#### .env options
 
 ```bash
 # CodebaseHQ settings
@@ -48,13 +48,16 @@ DeployHQ has a "Deployments" tab, found within your repo, that lists deployments
 
 Examples:
 
+	```bash
 	php artisan codebasehq:deploy app1.myapp.com
 	php artisan codebasehq:deploy production --branch=production
+	```
 
 ### Notify tickets of deployments
 
 This command is designed to be run as part of a deploy script and requires you using the CodebaseHQ feature of linking to tickets from commit messages (ex: [touch:12]).  By piping the output from `git log` for the commits you are deploying to `php artisan codebasehq:deploy-tickets`, the package will scan the logs for ticket references and then update those tickets that they have been deployed.  Here's some examples:
 
+	```bash
 	# Get all the commits that aren't on staging/master but are local
 	git log staging/master..master | php artisan codebasehq:deploy-tickets
 
@@ -69,6 +72,7 @@ This command is designed to be run as part of a deploy script and requires you u
 	run-deploy-code
 	cat /tmp/deployed-staging-commits.log | php artisan codebasehq:deploy-tickets --server=staging
 	rm /tmp/deployed-staging-commits.log
+	```
 
 Here is an example of what will get appended to the ticket:
 
