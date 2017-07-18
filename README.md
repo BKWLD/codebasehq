@@ -2,28 +2,40 @@
 
 This is a [Laravel Package](http://laravel.com/) that makes it easy to integrate with select [Codebase](http://www.codebasehq.com/) features:
 
-* Pushing of exceptions, including full stack trace and all enviornment variables.
+* Pushing of exceptions, including full stack trace and all environment variables.
 * A command that can be used in a deploy script to log a deployment.
-* A command that can be used to comment on all tickets that were refrenced in deployed git commit logs.
+* A command that can be used to comment on all tickets that were referenced in deployed git commit logs.
 
 ## Installation
 
-1. Add it to your composer.json (`"bkwld/codebasehq": "~3.0"`) and do a composer install.
-2. Add the service provider to your app.php config file providers: `'Bkwld\CodebaseHQ\ServiceProvider',`.
-3. Push config files to your app/config/packages directory for customization with `php artisan config:publish bkwld/codebasehq`.  This is required for Laravel to respect different config settings per enviornment.
+1. Add it to your composer.json (`"bkwld/codebasehq": "~4.0"`) and do a composer install.
+2. Add the service provider to your app.php config file providers: `Bkwld\CodebaseHQ\ServiceProvider::class,`.
+
 
 ## Configuration
 
-You will need to edit the published config file, supplying your API creds, for the package to work.  CodebaseHQ has a handfull of different API keys needed for the different services that this package touches:
+You will need to supply credentials to your CodebaseHQ account for this package to work. You can either store the following in your `.env` file (preferred) or publish and edit the config file for this package (`php artisan vendor:publish --provider=="Bkwld\CodebaseHQ\ServiceProvider"`).
 
-* To log exceptions, **only** the `exceptions_key` is required
-* For either deploy command, your user api creds are needed
+- To log exceptions, **only** the `project` configs is required
+- For either deploy command, your user `api` creds are needed
+
+#### .env configuration
+
+```
+# CodebaseHQ settings
+CODEBASE_PROJECT_ID=
+CODEBASE_PROJECT_KEY=
+CODEBASE_API_USERNAME=
+CODEBASE_API_KEY=
+CODEBASE_LOG_EXCEPTIONS=
+```
+
 
 ## Usage
 
 ### Exception Logging
 
-This just works as long as you have supplied the api key.  404 errors are currently ignored.  All other exceptions will be posted to Codebase.  By default, your "local" enviornment will not post exceptions to Codebase.  This can be changed in the published config file at app/config/packages/bkwld/codebasehq/local/config.php.
+This package listens for Laravel log events and pushes errors to CodebaseHQ.  By default, exceptions fired from a `local` environment are not sent to CodebaseHQ.  This can be changed by setting `CODEBASE_LOG_EXCEPTIONS` explicitly to `true` in your local `.env` file.  You can control which exceptions *don't* get sent to CodebaseHQ by editing your app's `App\Exceptions\Handler::$dontReport` variable.
 
 ### Deploy notifications
 
@@ -45,13 +57,13 @@ This command is designed to be run as part of a deploy script and requires you u
 
 	# Get all the commits that aren't on staging/master but are local
 	git log staging/master..master | php artisan codebasehq:deploy-tickets
-	
+
 	# The same as before, but fetch first so the diff is up to date
 	git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets
-	
+
 	# Specify which server enviornment you are deploying to
 	git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets --server=staging
-	
+
 	# Save the the log before you deploy, then tell CodebaseHQ about it after
 	git fetch staging && git log staging/master..master > /tmp/deployed-staging-commits.log
 	run-deploy-code
@@ -61,4 +73,3 @@ This command is designed to be run as part of a deploy script and requires you u
 Here is an examle of what will get appened to the ticket:
 
 ![Deployed message within a ticket](http://f.cl.ly/items/342g2T0a04103m031q0Q/PNG.png)
-	

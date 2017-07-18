@@ -1,9 +1,11 @@
 <?php namespace Bkwld\CodebaseHQ;
 
 // Dependencies
-use Airbrake;
+use Airbrake\Notifier;
+use Illuminate\Log\Events\MessageLogged;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
-class ServiceProvider extends \Illuminate\Support\ServiceProvider {
+class ServiceProvider extends BaseServiceProvider {
 
     /**
      * Register the service provider.
@@ -12,42 +14,39 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
      */
     public function register()
     {
+        // Merges package config with user config
+		$this->mergeConfigFrom(__DIR__.'/../config/config.php', 'codebasehq');
 
         // Build the airbrake object for posting exceptions to airbrake
         $this->app->singleton('codebasehq.airbrake', function($app) {
-
-            // Settings
-            $apiKey  = $app->make('config')->get('codebasehq::exceptions_key');
-            $options = array(
-                'apiEndPoint' => 'https://exceptions.codebasehq.com/notifier_api/v2/notices',
-                'environmentName' => $app->environment(),
-                'timeout' => 10, // The default wasn't log enough in my tests
-            );
-
-            // Instantiate airbrake
-            $config = new Airbrake\Configuration($apiKey, $options);
-            return new Airbrake\Client($config);
-
+            return new Notifier([
+                'projectId' => config('codebasehq.project.id'),
+                'projectKey' => config('codebasehq.project.key'),
+                'host' => 'https://exceptions.codebasehq.com',
+            ]);
         });
 
         // Build the Request object which talks to codebase
-        $this->app->singleton('codebasehq.request', function($app) {
-            $config = $app->make('config');
-            return new Request(
-                $config->get('codebasehq::api.username'),
-                $config->get('codebasehq::api.key'),
-                $config->get('codebasehq::project')
-            );
-        });
+        // $this->app->singleton('codebasehq.request', function($app) {
+        //     $config = $app->make('config');
+        //     return new Request(
+        //         $config->get('codebasehq.api.username'),
+        //         $config->get('codebasehq.api.key'),
+        //         $config->get('codebasehq.project')
+        //     );
+        // });
 
         // Register commands
-        $this->app->singleton('command.codebasehq.deploy', function($app) {
-            return new Commands\Deploy($app->make('codebasehq.request'));
-        });
-        $this->app->singleton('command.codebasehq.deploy_tickets', function($app) {
-            return new Commands\DeployTickets($app->make('codebasehq.request'));
-        });
-        $this->commands(array('command.codebasehq.deploy', 'command.codebasehq.deploy_tickets'));
+        // $this->app->singleton('command.codebasehq.deploy', function($app) {
+        //     return new Commands\Deploy($app->make('codebasehq.request'));
+        // });
+        // $this->app->singleton('command.codebasehq.deploy_tickets', function($app) {
+        //     return new Commands\DeployTickets($app->make('codebasehq.request'));
+        // });
+        // $this->commands([
+        //     'command.codebasehq.deploy',
+        //     'command.codebasehq.deploy_tickets'
+        // ]);
 
     }
 
@@ -56,23 +55,53 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
      */
     public function boot()
     {
-        $this->package('bkwld/codebasehq');
-        $app = $this->app;
+        // Registers the config file for publishing to app directory
+		$this->publishes([
+			__DIR__.'/../config/config.php' => config_path('codebasehq.php')
+		], 'codebasehq');
 
-        // Listen for exception events and pass them to Codebase HQ.
-        if ($app->make('config')->get('codebasehq::exception_logging')) {
-            $app->error(function(\Exception $exception) use ($app) {
+        // Add listener of errors
+        if (config('codebasehq.log_exceptions')) {
+            $this->listenForAndLogErrors();
+        }
+    }
 
-                // Exceptions to ignore
-                foreach($app->make('config')->get('codebasehq::ignored_exceptions') as $class) {
-                    if (is_a($exception, $class)) return;
-                }
+    /**
+     * Listen and log excetpions to Codebase
+     *
+     * @return void
+     */
+    public function listenForAndLogErrors()
+    {
+        // Listen for log events
+        $logger = $this->app->make('Psr\Log\LoggerInterface');
+        $logger->listen(function(MessageLogged $log) {
+            $this->onLog($log);
+        });
+    }
 
-                // Tell Codebase
-                $app->make('codebasehq.airbrake')->notifyOnException($exception);
-            });
+    /**
+     * Handle log events
+     *
+     * @param  MessageLogged $log
+     * @return void
+     */
+    protected function onLog(MessageLogged $log)
+    {
+        // Check that the message is an exception
+        if (!is_a($log->message, \Exception::class)) {
+            return;
         }
 
+        // Check that the exception is not on don't report list
+        $error = $log->message;
+        $handler = $this->app->make('App\Exceptions\Handler');
+        if (!$handler->shouldReport($error)) {
+            return;
+        }
+
+        // Sent to codebase
+        $this->app->make('codebasehq.airbrake')->notify($error);
     }
 
     /**
@@ -82,11 +111,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
      */
     public function provides()
     {
-        return array('codebasehq.airbrake',
+        return [
+            'codebasehq.airbrake',
             'codebasehq.request',
             'command.codebasehq.deploy',
             'command.codebasehq.deploy_tickets',
-        );
+        ];
     }
 
 }
