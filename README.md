@@ -23,7 +23,7 @@ You will need to supply credentials to your CodebaseHQ account for this package 
 
 ```
 # CodebaseHQ settings
-CODEBASE_PROJECT_ID=
+CODEBASE_PROJECT_SLUG=
 CODEBASE_PROJECT_KEY=
 CODEBASE_API_USERNAME=
 CODEBASE_API_KEY=
@@ -41,15 +41,15 @@ This package listens for Laravel log events and pushes errors to CodebaseHQ.  By
 
 DeployHQ has a "Deployments" tab, found within your repo, that lists deployments.  You can add to this list using the `codebasehq:deploy` command.  It accepts the following options, which mimic those found in the [API docs](http://support.codebasehq.com/kb/repositories/deployments).
 
+- `servers` **required** - List of servers which you are deploying to (multiple servers should be comma separated, e.g. app1.myapp.com, app2.myapp.com, app3.myapp.com).
 - `branch` - The branch which you are deploying. This defaults to the currently checked out branch.
 - `revision` - The reference of the revision/commit you are deploying. It defaults to the HEAD commit.
 - `deploy-env` - The environment you are pushing to.
-- `servers` **required** - List of servers which you are deploying to (multiple servers should be comma separated, e.g. app1.myapp.com, app2.myapp.com, app3.myapp.com).
 
 Examples:
 
-	php artisan codebasehq:deploy --server=app1.myapp.com
-	php artisan codebasehq:deploy --server=production
+	php artisan codebasehq:deploy app1.myapp.com
+	php artisan codebasehq:deploy production --branch=production
 
 ### Notify tickets of deployments
 
@@ -61,7 +61,7 @@ This command is designed to be run as part of a deploy script and requires you u
 	# The same as before, but fetch first so the diff is up to date
 	git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets
 
-	# Specify which server enviornment you are deploying to
+	# Specify which server environment you are deploying to
 	git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets --server=staging
 
 	# Save the the log before you deploy, then tell CodebaseHQ about it after
@@ -70,6 +70,6 @@ This command is designed to be run as part of a deploy script and requires you u
 	cat /tmp/deployed-staging-commits.log | php artisan codebasehq:deploy-tickets --server=staging
 	rm /tmp/deployed-staging-commits.log
 
-Here is an examle of what will get appened to the ticket:
+Here is an example of what will get appended to the ticket:
 
 ![Deployed message within a ticket](http://f.cl.ly/items/342g2T0a04103m031q0Q/PNG.png)

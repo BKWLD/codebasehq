@@ -1,11 +1,12 @@
 <?php return [
 
     /**
-     * The CodebaseHQ project id and key for this app. They can be found on the
-     * Exceptions setup tab of a project.
+     * The CodebaseHQ project slug and key for this app. The slug is in the URL
+     * short name of your project. The key is the exceptions project key you can
+     * see on the exceptions tab.
      */
     'project' => [
-        'id' => env('CODEBASE_PROJECT_ID'),
+        'slug' => env('CODEBASE_PROJECT_SLUG'),
         'key' => env('CODEBASE_PROJECT_KEY'),
     ],
 

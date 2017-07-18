@@ -20,33 +20,32 @@ class ServiceProvider extends BaseServiceProvider {
         // Build the airbrake object for posting exceptions to airbrake
         $this->app->singleton('codebasehq.airbrake', function($app) {
             return new Notifier([
-                'projectId' => config('codebasehq.project.id'),
+                'projectId' => config('codebasehq.project.slug'),
                 'projectKey' => config('codebasehq.project.key'),
                 'host' => 'https://exceptions.codebasehq.com',
             ]);
         });
 
         // Build the Request object which talks to codebase
-        // $this->app->singleton('codebasehq.request', function($app) {
-        //     $config = $app->make('config');
-        //     return new Request(
-        //         $config->get('codebasehq.api.username'),
-        //         $config->get('codebasehq.api.key'),
-        //         $config->get('codebasehq.project')
-        //     );
-        // });
+        $this->app->singleton('codebasehq.request', function($app) {
+            return new Request(
+                config('codebasehq.api.username'),
+                config('codebasehq.api.key'),
+                config('codebasehq.project.slug')
+            );
+        });
 
         // Register commands
-        // $this->app->singleton('command.codebasehq.deploy', function($app) {
-        //     return new Commands\Deploy($app->make('codebasehq.request'));
-        // });
-        // $this->app->singleton('command.codebasehq.deploy_tickets', function($app) {
-        //     return new Commands\DeployTickets($app->make('codebasehq.request'));
-        // });
-        // $this->commands([
-        //     'command.codebasehq.deploy',
-        //     'command.codebasehq.deploy_tickets'
-        // ]);
+        $this->app->singleton('command.codebasehq.deploy', function($app) {
+            return new Commands\Deploy($app->make('codebasehq.request'));
+        });
+        $this->app->singleton('command.codebasehq.deploy_tickets', function($app) {
+            return new Commands\DeployTickets($app->make('codebasehq.request'));
+        });
+        $this->commands([
+            'command.codebasehq.deploy',
+            'command.codebasehq.deploy_tickets'
+        ]);
 
     }
 

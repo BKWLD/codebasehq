@@ -34,7 +34,7 @@ class Request {
 
         // Endpoint
         $path = trim($path, '/');
-        $url = 'http://api3.codebasehq.com/'.$this->project.'/'.$path;
+        $url = 'https://api3.codebasehq.com/'.$this->project.'/'.$path;
 
         // Make request
         $ch = curl_init();

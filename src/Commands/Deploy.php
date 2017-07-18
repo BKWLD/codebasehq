@@ -12,7 +12,11 @@ class Deploy extends Command {
      *
      * @var string
      */
-    protected $name = 'codebasehq:deploy';
+    protected $signature = 'codebasehq:deploy
+        {servers : Commma delimited list of servers which you are deploying to}
+        {--b|branch : The branch which you are deploying}
+        {--r|revision : The reference of the revision/commit you are deploying}
+        {--deploy-env : The environment you are pushing to}';
 
     /**
      * The console command description.
@@ -22,23 +26,8 @@ class Deploy extends Command {
     protected $description = 'Trigger a deploy notification on CodebaseHQ';
 
     /**
-     * The options
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return array(
-            array('branch', 'b', InputOption::VALUE_OPTIONAL, 'The branch which you are deploying'),
-            array('revision', 'r', InputOption::VALUE_OPTIONAL, 'The reference of the revision/commit you are deploying'),
-            array('deploy-env', null, InputOption::VALUE_OPTIONAL, 'The environment you are pushing to'),
-            array('servers', 's', InputOption::VALUE_REQUIRED, 'List of servers (comma seperated) which you are deploying to'),
-        );
-    }
-
-    /**
      * Inject dependencies
-     * 
+     *
      * @param Bkwld\CodebaseHQ\Request $request
      */
     public function __construct($request) {
@@ -54,10 +43,10 @@ class Deploy extends Command {
     public function fire() {
 
         // Get options
+        $servers = $this->argument('servers');
         $branch = $this->option('branch');
         $revision = $this->option('revision');
         $environment = $this->option('deploy-env');
-        $servers = $this->option('servers');
 
         // Create defaults by talking to git
         if (!$branch) $branch = trim(`git rev-parse --abbrev-ref HEAD`);

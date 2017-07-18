@@ -15,7 +15,9 @@ class DeployTickets extends Command {
      *
      * @var string
      */
-    protected $name = 'codebasehq:deploy-tickets';
+    protected $signature = 'codebasehq:deploy-tickets
+        {--s|server : The name of the server environment being deployed to}
+        {--r|remote=origin : The git remote name for the CodebaseHQ repo}';
 
     /**
      * The console command description.
@@ -24,20 +26,10 @@ class DeployTickets extends Command {
      */
     protected $description = 'Pass git logs via STDIN and update all referenced tickets';
 
-    /**
-     * The options
-     */
-    protected function getOptions()
-    {
-        return array(
-            array('server', 's', InputOption::VALUE_OPTIONAL, 'The name of the server environment being deployed to'),
-            array('remote', 'r', InputOption::VALUE_OPTIONAL, 'The git remote name for the CodebaseHQ repo', 'origin'),
-        );
-    }
 
     /**
      * Inject dependencies
-     * 
+     *
      * @param Bkwld\CodebaseHQ\Request $request
      */
     public function __construct($request)
