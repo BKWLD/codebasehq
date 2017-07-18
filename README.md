@@ -8,7 +8,7 @@ This is a [Laravel Package](http://laravel.com/) that makes it easy to integrate
 
 ## Installation
 
-1. Add it to your composer.json (`"bkwld/codebasehq": "~4.0"`) and do a composer install.
+1. Add it to your composer.json (`"bkwld/codebasehq": "dev-master"`) and do a composer install.
 2. Add the service provider to your app.php config file providers: `Bkwld\CodebaseHQ\ServiceProvider::class,`.
 
 
@@ -21,7 +21,7 @@ You will need to supply credentials to your CodebaseHQ account for this package 
 
 #### .env configuration
 
-```
+```bash
 # CodebaseHQ settings
 CODEBASE_PROJECT_SLUG=
 CODEBASE_PROJECT_KEY=
