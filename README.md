@@ -48,31 +48,31 @@ DeployHQ has a "Deployments" tab, found within your repo, that lists deployments
 
 Examples:
 
-	```bash
-	php artisan codebasehq:deploy app1.myapp.com
-	php artisan codebasehq:deploy production --branch=production
-	```
+```bash
+php artisan codebasehq:deploy app1.myapp.com
+php artisan codebasehq:deploy production --branch=production
+```
 
 ### Notify tickets of deployments
 
 This command is designed to be run as part of a deploy script and requires you using the CodebaseHQ feature of linking to tickets from commit messages (ex: [touch:12]).  By piping the output from `git log` for the commits you are deploying to `php artisan codebasehq:deploy-tickets`, the package will scan the logs for ticket references and then update those tickets that they have been deployed.  Here's some examples:
 
-	```bash
-	# Get all the commits that aren't on staging/master but are local
-	git log staging/master..master | php artisan codebasehq:deploy-tickets
+```bash
+# Get all the commits that aren't on staging/master but are local
+git log staging/master..master | php artisan codebasehq:deploy-tickets
 
-	# The same as before, but fetch first so the diff is up to date
-	git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets
+# The same as before, but fetch first so the diff is up to date
+git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets
 
-	# Specify which server environment you are deploying to
-	git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets --server=staging
+# Specify which server environment you are deploying to
+git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets --server=staging
 
-	# Save the the log before you deploy, then tell CodebaseHQ about it after
-	git fetch staging && git log staging/master..master > /tmp/deployed-staging-commits.log
-	run-deploy-code
-	cat /tmp/deployed-staging-commits.log | php artisan codebasehq:deploy-tickets --server=staging
-	rm /tmp/deployed-staging-commits.log
-	```
+# Save the the log before you deploy, then tell CodebaseHQ about it after
+git fetch staging && git log staging/master..master > /tmp/deployed-staging-commits.log
+run-deploy-code
+cat /tmp/deployed-staging-commits.log | php artisan codebasehq:deploy-tickets --server=staging
+rm /tmp/deployed-staging-commits.log
+```
 
 Here is an example of what will get appended to the ticket:
 
