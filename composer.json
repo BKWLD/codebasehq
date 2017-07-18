@@ -9,8 +9,8 @@
         "airbrake/phpbrake": "^1.0@dev"
     },
     "autoload": {
-        "psr-0": {
-            "Bkwld\\CodebaseHQ": "src/"
+        "psr-4": {
+            "Bkwld\\CodebaseHQ\\": "src/"
         }
     },
     "minimum-stability": "dev"
