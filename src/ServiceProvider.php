@@ -23,6 +23,8 @@ class ServiceProvider extends BaseServiceProvider {
                 'projectId' => config('codebasehq.project.slug'),
                 'projectKey' => config('codebasehq.project.key'),
                 'host' => 'https://exceptions.codebasehq.com',
+                'rootDirectory' => base_path(),
+                'environment' => config('app.env'),
             ]);
         });
 
