@@ -15,7 +15,7 @@ class ServiceProvider extends BaseServiceProvider {
     public function register()
     {
         // Merges package config with user config
-		$this->mergeConfigFrom(__DIR__.'/../config/config.php', 'codebasehq');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'codebasehq');
 
         // Build the airbrake object for posting exceptions to airbrake
         $this->app->singleton('codebasehq.airbrake', function($app) {
@@ -55,9 +55,9 @@ class ServiceProvider extends BaseServiceProvider {
     public function boot()
     {
         // Registers the config file for publishing to app directory
-		$this->publishes([
-			__DIR__.'/../config/config.php' => config_path('codebasehq.php')
-		], 'codebasehq');
+        $this->publishes([
+            __DIR__.'/../config/config.php' => config_path('codebasehq.php')
+        ], 'codebasehq');
 
         // Add listener of errors
         if (config('codebasehq.log_exceptions')) {
