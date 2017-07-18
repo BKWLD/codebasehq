@@ -5,8 +5,8 @@
     "license": "MIT",
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "<4.3,>=4.0",
-        "dbtlr/php-airbrake": "dev-master"
+        "illuminate/support": "^5.0",
+        "airbrake/phpbrake": "^1.0@dev"
     },
     "autoload": {
         "psr-0": {
