@@ -89,13 +89,14 @@ class ServiceProvider extends BaseServiceProvider {
      */
     protected function onLog(MessageLogged $log)
     {
-        // Check that the message is an exception
-        if (!is_a($log->message, \Exception::class)) {
+        // Check that an exception was received
+        if (empty($log->context['exception'])
+            || !is_a($log->context['exception'], \Exception::class)) {
             return;
         }
 
         // Check that the exception is not on don't report list
-        $error = $log->message;
+        $error = $log->context['exception'];
         $handler = $this->app->make('App\Exceptions\Handler');
         if (!$handler->shouldReport($error)) {
             return;
